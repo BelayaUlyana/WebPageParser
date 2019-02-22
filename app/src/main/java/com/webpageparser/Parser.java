@@ -12,7 +12,7 @@ public class Parser {
             ("<a\\s+href\\s*=\\s*\"?(.*?)[\"|>]", Pattern.CASE_INSENSITIVE);
 
 
-    public static List<String> getAllMails(StringBuilder page) {
+    public static List<String> getAllMails(String page) {
         List<String> result = new ArrayList<>();
         Matcher matcher = mailPattern.matcher(page);
         String s;
@@ -24,7 +24,7 @@ public class Parser {
         return result;
     }
 
-    public static List<String> getAllLinksOnPage(StringBuilder page) {
+    public static List<String> getAllLinksOnPage(String page) {
         List<String> result = new ArrayList<>();
         Matcher matcher = linkPattern.matcher(page);
         while (matcher.find()) {

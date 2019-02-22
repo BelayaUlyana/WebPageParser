@@ -18,9 +18,10 @@ public class MainActivity extends Activity implements OnTaskCompleted {
     private EditText mEntryURL;
     private String firstURL;
     private ArrayList<List<String>> mainLinksList, mainEmailsList;
-    private int spinnerPosition;
+    private int deepCounter;
     private int cur = 0;
     private int progress = 0;
+    private int delta = 0;
 
 
     @Override
@@ -42,25 +43,24 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 
     @Override
     public void onTaskCompleted(List<String> responseLinksList, List<String> responseEmailsList) {
+        delta += (int) 100 / deepCounter;
         if (responseLinksList.size() != 0) mainLinksList.add(cur, responseLinksList);
         if (responseEmailsList.size() != 0) mainEmailsList.add(cur, responseEmailsList);
         System.out.println("SIZE mainLinksList = " + mainLinksList.get(cur).size() + ":::" + mainLinksList.size());
-        if (cur < spinnerPosition) {
-            System.out.println("cur < deep = " + cur + ":" + spinnerPosition);
+        if (cur < deepCounter) {
+            System.out.println("cur < deep = " + cur + ":" + deepCounter);
             if (mainLinksList.size() != 0) {
                 for (int k = 0; k < mainLinksList.get(cur).size(); k++) {
                     System.out.println("link = " + mainLinksList.get(cur).get(k));
                     newUrlContent(mainLinksList.get(cur).get(k));
-                    postProgress(progress + 20);
                 }
-                postProgress(progress + 20);
+                postProgress(progress + delta);
                 cur++;
             } else {
                 System.out.println("List links is empty");
             }
         } else {
             System.out.println("End of getting links. size = " + mainLinksList.size());
-//            mOutputTextView.setText(mainLinksList.toString() + mainLinksList.size());
             mOutputTextView.setText(mainEmailsList.toString());
         }
     }
@@ -70,7 +70,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         public void onClick(View view) {
             firstURL = mEntryURL.getText().toString();
             newUrlContent(firstURL);
-            progress = progress + 20;
             postProgress(progress);
         }
     };
@@ -79,13 +78,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
     private void postProgress(int progress) {
         String strProgress = String.valueOf(progress) + " %";
         mProgressBar.setProgress(progress);
-
-        if (progress == 0) {
-            mProgressBar.setSecondaryProgress(0);
-        } else {
-            mProgressBar.setSecondaryProgress(progress + 20);
-            mTextProgressBar.setText(strProgress);
-        }
+        mTextProgressBar.setText(strProgress);
     }
 
     private void newUrlContent(String url) {
@@ -112,12 +105,12 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerPosition = numbers.get(position);
+                deepCounter = numbers.get(position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                spinnerPosition = numbers.get(1);
+                deepCounter = numbers.get(1);
             }
         });
     }
