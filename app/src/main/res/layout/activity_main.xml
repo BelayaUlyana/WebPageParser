@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <EditText
+                android:id="@+id/entryURL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Type here URL"
+                android:inputType="textUri" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:orientation="vertical">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/buttonStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start" />
+
+    <RelativeLayout
+        android:id="@+id/rl_progress_bar_set"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_start"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:max="100" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textProgressBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="center" />
+        </ScrollView>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/resultOutput"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="" />
+
+
+</LinearLayout>
