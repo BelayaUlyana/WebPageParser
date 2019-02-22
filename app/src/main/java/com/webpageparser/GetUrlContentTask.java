@@ -46,8 +46,7 @@ class GetUrlContentTask extends AsyncTask<String, Integer, String> {
         // как только ваша фоновая задача завершена. Данный обработчик при вызове синхронизируется с потоком GUI(graphical user interface),
         // поэтому внутри него вы можете безопасно изменять элементы пользовательского интерфейса.
         StringBuilder result = new StringBuilder(res);
-        taskCompleted.onTaskCompleted(Parser.getAllLinksOnPage(result), Parser.getAllMails(result)); // здесь теперь возвращается лист
-//                mOutputTextView.setText(responseLinksList.toString());
+        taskCompleted.onTaskCompleted(Parser.getAllLinksOnPage(result), Parser.getAllMails(result));
     }
 
     protected void onProgressUpdate(Integer... progress) {

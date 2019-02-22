@@ -59,25 +59,25 @@
             android:layout_alignParentTop="true"
             android:max="100" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+        <TextView
+            android:id="@+id/textProgressBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center" />
 
-            <TextView
-                android:id="@+id/textProgressBar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:gravity="center" />
-        </ScrollView>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/resultOutput"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <TextView
+            android:id="@+id/resultOutput"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="" />
+    </ScrollView>
 
 </LinearLayout>

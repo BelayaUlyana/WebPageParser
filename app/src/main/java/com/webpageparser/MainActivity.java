@@ -11,23 +11,23 @@ import java.util.*;
 
 public class MainActivity extends Activity implements OnTaskCompleted {
 
-    private Integer[] numbers = {1, 2, 3, 4, 5};
-    private int progress = 0;
     private TextView mOutputTextView;
     private ProgressBar mProgressBar;
+    private TextView mTextProgressBar;
     private Button mStartButton;
     private EditText mEntryURL;
     private String firstURL;
-    private TextView mTextProgressBar;
     private ArrayList<List<String>> mainLinksList, mainEmailsList;
-    private int deep = 2;
+    private int spinnerPosition;
     private int cur = 0;
+    private int progress = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        createSpinner(); //Созд поле выбора
+        createSpinner();
 
         mainEmailsList = new ArrayList<>();
         mainLinksList = new ArrayList<List<String>>();
@@ -38,25 +38,31 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         mStartButton = (Button) findViewById(R.id.buttonStart);
         mEntryURL = (EditText) findViewById(R.id.entryURL);
         mStartButton.setOnClickListener(onButtonClick);
-
     }
 
     @Override
     public void onTaskCompleted(List<String> responseLinksList, List<String> responseEmailsList) {
-
-        if (responseLinksList.size() != 0) mainLinksList.add(responseLinksList);
-        if (responseEmailsList.size() != 0) mainEmailsList.add(responseEmailsList);
-//            System.out.println("SIZE mainLinksList = " + mainLinksList.size());
-        while (cur < deep) {
-
-            for (int j = 0; j < mainLinksList.get(cur).size(); j++) {
-                newUrlContent(mainLinksList.get(cur).get(j));
+        if (responseLinksList.size() != 0) mainLinksList.add(cur, responseLinksList);
+        if (responseEmailsList.size() != 0) mainEmailsList.add(cur, responseEmailsList);
+        System.out.println("SIZE mainLinksList = " + mainLinksList.get(cur).size() + ":::" + mainLinksList.size());
+        if (cur < spinnerPosition) {
+            System.out.println("cur < deep = " + cur + ":" + spinnerPosition);
+            if (mainLinksList.size() != 0) {
+                for (int k = 0; k < mainLinksList.get(cur).size(); k++) {
+                    System.out.println("link = " + mainLinksList.get(cur).get(k));
+                    newUrlContent(mainLinksList.get(cur).get(k));
+                    postProgress(progress + 20);
+                }
+                postProgress(progress + 20);
+                cur++;
+            } else {
+                System.out.println("List links is empty");
             }
-            postProgress(progress + 10);
-            cur++;
+        } else {
+            System.out.println("End of getting links. size = " + mainLinksList.size());
+//            mOutputTextView.setText(mainLinksList.toString() + mainLinksList.size());
+            mOutputTextView.setText(mainEmailsList.toString());
         }
-        mOutputTextView.setText(mainLinksList.toString());
-//        mOutputTextView.setText(mainEmailsList.toString());
     }
 
     View.OnClickListener onButtonClick = new View.OnClickListener() {
@@ -64,10 +70,23 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         public void onClick(View view) {
             firstURL = mEntryURL.getText().toString();
             newUrlContent(firstURL);
-            progress = progress + 10;
+            progress = progress + 20;
             postProgress(progress);
         }
     };
+
+
+    private void postProgress(int progress) {
+        String strProgress = String.valueOf(progress) + " %";
+        mProgressBar.setProgress(progress);
+
+        if (progress == 0) {
+            mProgressBar.setSecondaryProgress(0);
+        } else {
+            mProgressBar.setSecondaryProgress(progress + 20);
+            mTextProgressBar.setText(strProgress);
+        }
+    }
 
     private void newUrlContent(String url) {
         if (!TextUtils.isEmpty(url)) {
@@ -81,23 +100,25 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         }
     }
 
-    private void postProgress(int progress) {
-        String strProgress = String.valueOf(progress) + " %";
-        mProgressBar.setProgress(progress);
-
-        if (progress == 0) {
-            mProgressBar.setSecondaryProgress(0);
-        } else {
-            mProgressBar.setSecondaryProgress(progress + 10);
-            mTextProgressBar.setText(strProgress);
-        }
-    }
-
     private void createSpinner() {
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, numbers);
+        final Spinner spinner = findViewById(R.id.spinner);
+        final List<Integer> numbers = new ArrayList<>();
+        for (int j = 1; j < 6; j++)
+            numbers.add(j);
+        final ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, numbers);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setPrompt("select search depth");
+        spinner.setSelection(1);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerPosition = numbers.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                spinnerPosition = numbers.get(1);
+            }
+        });
     }
 }

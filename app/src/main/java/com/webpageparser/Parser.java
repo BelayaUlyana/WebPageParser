@@ -15,8 +15,10 @@ public class Parser {
     public static List<String> getAllMails(StringBuilder page) {
         List<String> result = new ArrayList<>();
         Matcher matcher = mailPattern.matcher(page);
+        String s;
         while (matcher.find()) {
-            result.add(page.substring(matcher.start(), matcher.end()));
+            s = page.substring(matcher.start(), matcher.end());
+            if (s.length() != 0) result.add(s);
         }
         System.out.println(result);
         return result;
@@ -27,7 +29,8 @@ public class Parser {
         Matcher matcher = linkPattern.matcher(page);
         while (matcher.find()) {
             String res = page.substring(matcher.start(), matcher.end());
-            result.add(res.substring(9, res.length() - 1));
+            res = res.substring(9, res.length() - 1);
+            if (res.length() != 0) result.add(res);
         }
         return result;
     }
